@@ -1,0 +1,41 @@
+{% set goname = "git.sr.ht/~rjarry/aerc" %}
+{% set version = "0.18.2" %}
+
+{% set name = goname.split('/')[-1] %}
+{% set pkg_src = ('src/'+goname).replace("/",os.sep) %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version|replace("-", "_") }}
+
+source:
+  - folder: {{ pkg_src }}
+    url: https://{{ goname }}/archive/{{ version }}.tar.gz
+    sha256: 78408b3fe7a4991a6097c961c348fb7583af52dff80cbfcd99808415cf3d7586
+
+build:
+  binary_relocation: False
+  detect_binary_files_with_prefix: False
+  number: 0
+  script:
+    - pushd {{ pkg_src }}
+    - make MANDIR=$PREFIX/man install
+    - go-licenses save . --save_path ../../../../library_licenses
+
+requirements:
+  build:
+    - go>=1.18
+    - go-cgo>=1.18
+    - go-licenses
+    - make
+    - scdoc
+
+about:
+  dev_url: https://{{ goname }}
+  home: https://aerc-mail.org/
+  license: MIT
+  license_family: MIT
+  license_file:
+    - {{ pkg_src }}/LICENSE
+    - library_licenses/
+  summary: 'aerc is an email client for your terminal'
