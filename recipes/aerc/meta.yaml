@@ -24,11 +24,16 @@ build:
 
 requirements:
   build:
-    - go>=1.18
-    - go-cgo>=1.18
+    - {{ compiler('go-cgo') }} >=1.21
+    - {{ compiler('c') }}
+    - {{ stdlib('c') }}
     - go-licenses
     - make
     - scdoc
+
+test:
+  commands:
+    - aerc -h
 
 about:
   dev_url: https://{{ goname }}
