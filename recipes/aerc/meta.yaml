@@ -22,8 +22,9 @@ build:
 
 requirements:
   build:
-    - {{ compiler("go-cgo") }} >=1.21
     - {{ compiler("c") }}
+    - {{ stdlib("c") }}
+    - {{ compiler("cgo") }} >=1.21
     - go-licenses
     - make
     - scdoc
