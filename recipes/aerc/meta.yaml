@@ -14,19 +14,16 @@ source:
     sha256: 78408b3fe7a4991a6097c961c348fb7583af52dff80cbfcd99808415cf3d7586
 
 build:
-  binary_relocation: False
-  detect_binary_files_with_prefix: False
   number: 0
   script:
     - pushd {{ pkg_src }}
-    - make MANDIR=$PREFIX/man install
+    - make BUILD_OPTS="-buildmode pie -compiler gc" GO_EXTRA_LDFLAGS="-extldflags '$LDFLAGS'" MANDIR=$PREFIX/man install
     - go-licenses save . --save_path ../../../../library_licenses
 
 requirements:
   build:
-    - {{ compiler('go-cgo') }} >=1.21
-    - {{ compiler('c') }}
-    - {{ stdlib('c') }}
+    - {{ compiler("go-cgo") }} >=1.21
+    - {{ compiler("c") }}
     - go-licenses
     - make
     - scdoc
@@ -36,11 +33,24 @@ test:
     - aerc -h
 
 about:
-  dev_url: https://{{ goname }}
   home: https://aerc-mail.org/
+  summary: 'aerc is an email client for your terminal'
+  description: |
+    aerc is an email client for your terminal.
+
+    This is a fork of the original aerc by Drew DeVault.
+
+    A short demonstration can be found on https://aerc-mail.org/
+
+    Join the IRC channel: #aerc on irc.libera.chat for end-user support, and development.
   license: MIT
   license_family: MIT
   license_file:
     - {{ pkg_src }}/LICENSE
     - library_licenses/
-  summary: 'aerc is an email client for your terminal'
+  dev_url: https://git.sr.ht/~rjarry/aerc
+  doc_source_url: https://git.sr.ht/~rjarry/aerc/tree/master/item/doc/
+
+extra:
+  recipe-maintainers:
+    - blmaier
